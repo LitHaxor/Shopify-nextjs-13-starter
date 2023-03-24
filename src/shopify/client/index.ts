@@ -4,7 +4,7 @@ import {
   storefrontDomain,
   storefrontVersion,
 } from "./config";
-import { GraphqlVariables } from "./types";
+import { GraphqlVariables, StorefrontQueryResponse } from "./types";
 
 const adminUrl = `https://${storefrontDomain}/admin/api/${storefrontVersion}/graphql.json`;
 const storefrontUrl = `https://${storefrontDomain}/api/${storefrontVersion}/graphql.json`;
@@ -12,11 +12,14 @@ const storefrontUrl = `https://${storefrontDomain}/api/${storefrontVersion}/grap
 const adminClient = axios.create({
   baseURL: adminUrl,
   headers: {
-    "X-Shopify-Access-Token": storefrontApiToken,
+    "X-Shopify-Access-Token": "74fee122a580fb569d6d35115039644e",
   },
 });
 const storefrontClient = axios.create({
   baseURL: storefrontUrl,
+  headers: {
+    "X-Shopify-Storefront-Access-Token": "74fee122a580fb569d6d35115039644e",
+  },
 });
 
 export const adminQuery = async <R = any>(query: string) => {
@@ -33,13 +36,24 @@ export const storefrontQuery = async <R = any>(
   query: string,
   variables?: GraphqlVariables
 ) => {
+  let response = {} as StorefrontQueryResponse<R>;
   try {
-    const { data } = await storefrontClient.post("", { query, variables });
-    return data as R;
+    const { data, status } = await storefrontClient.post("", {
+      query,
+      variables,
+    });
+    response.data = data.data as R;
+    response.status = status;
+    response.errors = null;
   } catch (error) {
-    console.error(error);
-    return null as any;
+    if (axios.isAxiosError(error)) {
+      response.data = null;
+      response.status = error.response?.status || 500;
+      response.errors = error.response?.data.errors;
+    }
   }
+
+  return response;
 };
 
 export const adminMutation = async <T = any, R = any>(

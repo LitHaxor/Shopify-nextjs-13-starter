@@ -8,6 +8,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import Link from "next/link";
 
 const navigation = {
   categories: [
@@ -219,9 +220,11 @@ export default function Example() {
                               className="group relative text-sm"
                             >
                               <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                                <img
+                                <Image
                                   src={item.imageSrc}
                                   alt={item.imageAlt}
+                                  width={40}
+                                  height={40}
                                   className="object-cover object-center"
                                 />
                               </div>
@@ -306,9 +309,11 @@ export default function Example() {
 
                 <div className="border-t border-gray-200 py-6 px-4">
                   <a href="#" className="-m-2 flex items-center p-2">
-                    <img
+                    <Image
                       src="https://tailwindui.com/img/flags/flag-canada.svg"
                       alt=""
+                      width={40}
+                      height={40}
                       className="block h-auto w-5 flex-shrink-0"
                     />
                     <span className="ml-3 block text-base font-medium text-gray-900">
@@ -345,31 +350,20 @@ export default function Example() {
 
               {/* Logo */}
               <div className="ml-4 flex lg:ml-0">
-                <a href="#">
-                  <span className="sr-only">Your Company</span>
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt=""
-                  />
-                </a>
+                <Link href="/">
+                  <span>Logo</span>
+                </Link>
               </div>
 
               <div className="ml-auto flex items-center">
                 <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-gray-700 hover:text-gray-800"
-                  >
-                    Sign in
-                  </a>
                   <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                  <a
-                    href="#"
+                  <Link
+                    href="/auth/login"
                     className="text-sm font-medium text-gray-700 hover:text-gray-800"
                   >
-                    Create account
-                  </a>
+                    Login
+                  </Link>
                 </div>
 
                 <div className="hidden lg:ml-8 lg:flex">
